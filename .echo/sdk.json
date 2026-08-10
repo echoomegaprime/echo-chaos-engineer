@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "name": "echo-chaos-engineer",
+  "capabilities": [],
+  "note": "No echo.chaos.* or similar capabilities are registered in arcanum_sdk.sdk_capabilities for this repo (checked echo.chaos%, and %chaos% broadly -- the only 2 matches, echo.aic.chaos and echo.dr.chaos_drill, belong to different, unrelated systems). This service is not currently SDK-gate-integrated.",
+  "entrypoints": ["scripts/certforge_journey.py"],
+  "data_classification": "restricted",
+  "network": "none"
+}

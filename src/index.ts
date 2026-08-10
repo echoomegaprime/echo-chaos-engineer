@@ -178,8 +178,27 @@ function parseSafety(raw: unknown): SafetyConfig {
 
 // ─── Auth Middleware ─────────────────────────────────────────────────────────
 
-function authMiddleware(apiKey: string | null | undefined, commanderOverride: string | null | undefined, env: Env): Response | null {
-  if (!env.ECHO_API_KEY || apiKey !== env.ECHO_API_KEY) {
+// Constant-time comparison: a plain `!==` on a secret leaks its length and
+// prefix-match progress through response timing. Compare fixed-length
+// buffers so elapsed time is independent of where (or whether) the values
+// diverge.
+export function timingSafeEqual(a: string | undefined | null, b: string | undefined | null): boolean {
+  if (a == null || b == null) return false;
+  const enc = new TextEncoder();
+  const bufA = enc.encode(a);
+  const bufB = enc.encode(b);
+  const len = Math.max(bufA.length, bufB.length, 1);
+  const padA = new Uint8Array(len);
+  const padB = new Uint8Array(len);
+  padA.set(bufA);
+  padB.set(bufB);
+  let diff = bufA.length ^ bufB.length;
+  for (let i = 0; i < len; i++) diff |= (padA[i] ?? 0) ^ (padB[i] ?? 0);
+  return diff === 0;
+}
+
+export function authMiddleware(apiKey: string | null | undefined, commanderOverride: string | null | undefined, env: Env): Response | null {
+  if (!env.ECHO_API_KEY || !timingSafeEqual(apiKey, env.ECHO_API_KEY)) {
     return jsonErr('Unauthorized: invalid or missing X-Echo-API-Key', 401);
   }
   return null;
@@ -562,7 +581,7 @@ async function updateResilienceScore(env: Env, serviceName: string): Promise<voi
 
 // ─── App ─────────────────────────────────────────────────────────────────────
 
-const app = new Hono<{ Bindings: Env }>();
+export const app = new Hono<{ Bindings: Env }>();
 
 // CORS
 app.use('*', cors({

@@ -2,22 +2,24 @@
   "name": "echo-chaos-engineer",
   "version": "1.0.0",
   "main": "src/index.ts",
+  "type": "module",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "db:init": "wrangler d1 execute echo-chaos-engineer --remote --file=schema.sql",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsc --noEmit && node --test tests/*.test.mjs"
   },
   "keywords": ["chaos-engineering", "resilience", "echo"],
   "author": "ECHO-OMEGA-PRIME",
-  "license": "UNLICENSED",
+  "license": "SEE LICENSE IN LICENSE",
   "description": "Chaos engineering Worker for controlled failure injection and resilience testing across ECHO infrastructure",
   "private": true,
   "dependencies": {
-    "hono": "^4.12.8"
+    "hono": "^4.13.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260317.1",
+    "@cloudflare/workers-types": "^5.20260804.1",
     "typescript": "^5.9.3",
     "wrangler": "^4.76.0"
   }
