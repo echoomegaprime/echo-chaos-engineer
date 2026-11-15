@@ -16,11 +16,11 @@
   "description": "Chaos engineering Worker for controlled failure injection and resilience testing across ECHO infrastructure",
   "private": true,
   "dependencies": {
-    "hono": "^4.13.1"
+    "hono": "^4.13.5"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260804.1",
     "typescript": "^5.9.3",
-    "wrangler": "^4.76.0"
+    "wrangler": "^4.130.0"
   }
 }
